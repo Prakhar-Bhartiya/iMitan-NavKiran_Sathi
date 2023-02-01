@@ -24,7 +24,7 @@ app.use(express.json())
 
 app.get('/', async (req, res) => {
   res.status(200).send({
-    message: 'Server Working! Hurray!!' + translate
+    message: 'Server Working! Hurray!!'
   })
 })
 
@@ -32,15 +32,9 @@ app.post('/', async (req, res) => {
   try {
     const prompt = req.body.prompt;
 
-    const target = 'en';
-    // Translates some text into English
-    const [translation] = await translate.translate(prompt, target);
-    
-    //console.log(`Translation: ${translation}`);
-
     const response = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `${translation}`,
+      prompt: prompt,
       temperature: 0, // Higher values means the model will take more risks.
       max_tokens: 3000, // The maximum number of tokens to generate in the completion. Most models have a context length of 2048 tokens (except for the newest models, which support 4096).
       top_p: 1, // alternative to sampling with temperature, called nucleus sampling
