@@ -2,12 +2,19 @@ import express from 'express'
 import * as dotenv from 'dotenv'
 import cors from 'cors'
 import { Configuration, OpenAIApi } from 'openai'
+import { Translate } from '@google-cloud/translate/build/src/v2/index.js'
 
 dotenv.config()
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+//https://www.npmjs.com/package/@google-cloud/translate?activeTab=readme
+const translate = new Translate({
+  credentials : JSON.parse(process.env.GOOGLE_TRANSLATOR_CREDENTIAL),
+});
+
 
 const openai = new OpenAIApi(configuration);
 
@@ -27,7 +34,7 @@ app.post('/', async (req, res) => {
 
     const response = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `${prompt}`,
+      prompt: prompt,
       temperature: 0, // Higher values means the model will take more risks.
       max_tokens: 3000, // The maximum number of tokens to generate in the completion. Most models have a context length of 2048 tokens (except for the newest models, which support 4096).
       top_p: 1, // alternative to sampling with temperature, called nucleus sampling
@@ -35,8 +42,12 @@ app.post('/', async (req, res) => {
       presence_penalty: 0, // Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.
     });
 
+    //const [transHindi] =  translate.translate(response.data.choices[0].text, 'hi');
+
     res.status(200).send({
       bot: response.data.choices[0].text
+      // bot : transHindi
+
     });
 
   } catch (error) {
