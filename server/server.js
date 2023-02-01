@@ -2,7 +2,7 @@ import express from 'express'
 import * as dotenv from 'dotenv'
 import cors from 'cors'
 import { Configuration, OpenAIApi } from 'openai'
-import { Translate } from '@google-cloud/translate/build/src/v2/index.js'
+//import { Translate } from '@google-cloud/translate/build/src/v2/index.js'
 
 dotenv.config()
 
@@ -11,9 +11,9 @@ const configuration = new Configuration({
 });
 
 //https://www.npmjs.com/package/@google-cloud/translate?activeTab=readme
-const translate = new Translate({
-  credentials : JSON.parse(process.env.GOOGLE_TRANSLATOR_CREDENTIAL),
-});
+// const translate = new Translate({
+//   credentials : JSON.parse(process.env.GOOGLE_TRANSLATOR_CREDENTIAL),
+// });
 
 
 const openai = new OpenAIApi(configuration);
